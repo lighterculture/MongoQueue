@@ -86,7 +86,7 @@ func (m *MongoScheduleJobs) Start() {
 func (m *MongoScheduleJobs) addJob(queue string, x interface{}, p int) (string, error) {
 	coll := m.MongoSession.DB(m.Database).C(queue)
 
-	id := uuid.NewV4()
+	id := uuid.NewV4().String()
 
 	now := time.Now().Unix()
 	err := coll.Insert(bson.M{
