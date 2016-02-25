@@ -11,7 +11,7 @@ See: https://github.com/alouca/MongoQueue
 package mongoqueue
 
 import (
-	"code.google.com/p/go-uuid/uuid"
+	"github.com/satori/go.uuid"
 	"github.com/alouca/goconfig"
 	"github.com/alouca/gologger"
 	"labix.org/v2/mgo"
@@ -119,7 +119,7 @@ func (q *MongoQueue) Truncate() error {
 // In order to make the queue to act as FIFO instead of a priority queue, specify for all jobs priority 0
 func (q *MongoQueue) Add(x interface{}, id string, p int) (string, error) {
 	if id == "" {
-		id = uuid.NewRandom().String()
+		id = uuid.NewV4()
 	}
 	now := time.Now().Unix()
 	err := q.C.Insert(bson.M{
