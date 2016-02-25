@@ -12,7 +12,7 @@ See: https://github.com/alouca/MongoQueue
 package mongoqueue
 
 import (
-	"code.google.com/p/go-uuid/uuid"
+	"github.com/satori/go.uuid"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	"time"
@@ -86,7 +86,7 @@ func (m *MongoScheduleJobs) Start() {
 func (m *MongoScheduleJobs) addJob(queue string, x interface{}, p int) (string, error) {
 	coll := m.MongoSession.DB(m.Database).C(queue)
 
-	id := uuid.NewRandom().String()
+	id := uuid.NewV4()
 
 	now := time.Now().Unix()
 	err := coll.Insert(bson.M{
