@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 /*
-Package mongoqueue provides a job queue, which uses Mongo as a backend storage engine. 
+Package mongoqueue provides a job queue, which uses Mongo as a backend storage engine.
 It supports a sophisticated feature set,  facilitating fine-grained job queueing.
 
 See: https://github.com/alouca/MongoQueue
@@ -11,9 +11,9 @@ See: https://github.com/alouca/MongoQueue
 package mongoqueue
 
 import (
-	"github.com/satori/go.uuid"
 	"github.com/alouca/goconfig"
 	"github.com/alouca/gologger"
+	"github.com/satori/go.uuid"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	"math/rand"
@@ -189,14 +189,14 @@ func (q *MongoQueue) Lock(pid string) (string, interface{}, error) {
 		"retries":    bson.M{"$lte": q.Settings.RetryLimit},
 	}).Sort("-priority").Limit(1).Apply(change, &res)
 
-	l.Printf("Debug: %v\n", res)
+	//l.Printf("Debug: %v\n", res)
 
 	if info != nil {
 		if info.Updated == 0 {
 			return "", nil, nil
 		}
 	} else if err != nil {
-		l.Error("Error retrieving data for Lock(): %s\n", err)
+		//l.Error("Error retrieving data for Lock(): %s\n", err)
 		return "", nil, err
 	}
 	id := res["id"].(string)
@@ -244,11 +244,11 @@ func (q *MongoQueue) Complete(id string) error {
 	err := q.C.Remove(bson.M{"inprogress": true, "id": id})
 
 	if err != nil {
-		l.Error("Unable to find job to mark as complete for Job ID %s\n", id)
+		//l.Error("Unable to find job to mark as complete for Job ID %s\n", id)
 		return err
 	}
 
-	l.Debug("Removed job as completed from id %s\n", id)
+	//l.Debug("Removed job as completed from id %s\n", id)
 	return nil
 }
 
@@ -275,7 +275,7 @@ func (q *MongoQueue) Fail(id string) error {
 	info, err := q.C.Find(bson.M{"inprogress": true, "id": id}).Limit(1).Apply(change, &res)
 
 	if info != nil && info.Updated == 1 {
-		l.Printf("Marked job as failed for ID %s\n", id)
+		//	l.Printf("Marked job as failed for ID %s\n", id)
 	}
 	return err
 }
