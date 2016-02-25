@@ -119,7 +119,7 @@ func (q *MongoQueue) Truncate() error {
 // In order to make the queue to act as FIFO instead of a priority queue, specify for all jobs priority 0
 func (q *MongoQueue) Add(x interface{}, id string, p int) (string, error) {
 	if id == "" {
-		id = uuid.NewV4()
+		id = uuid.NewV4().String()
 	}
 	now := time.Now().Unix()
 	err := q.C.Insert(bson.M{
